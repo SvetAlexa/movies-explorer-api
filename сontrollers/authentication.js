@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const createUser = (req, res) => {
+const register = (req, res) => {
   const { email, name } = req.body;
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create(
@@ -18,7 +18,7 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send('Переданы некорректные данные пользователя');
+        return res.status(400).send('Переданы некорректные данные');
       }
       if (err.code === 11000) {
         return res.status(409).send('Такой пользователь уже существует');
@@ -40,9 +40,7 @@ const login = (req, res) => {
         })
         .send({ email, name, _id });
     })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+    .catch((err) => res.status(500).send(err.message));
 };
 
 const logout = (req, res) => {
@@ -51,7 +49,7 @@ const logout = (req, res) => {
 };
 
 module.exports = {
-  createUser,
+  register,
   login,
   logout,
 };

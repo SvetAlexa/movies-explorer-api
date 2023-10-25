@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const { createUser, login, logout } = require('../сontrollers/user');
+const tokenValidation = require('../middlewares/auth');
+const { register, login, logout } = require('../сontrollers/authentication');
 
-router.post('/signup', createUser);
+router.post('/signup', register);
 router.post('/signin', login);
-router.post('/signout', logout);
+router.post('/signout', tokenValidation, logout);
 
 module.exports = router;
