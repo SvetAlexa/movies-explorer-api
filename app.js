@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 const appRouter = require('./routes/index');
 
@@ -21,10 +22,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
 
 app.use(cookieParser());
 
+app.use(requestLogger);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(appRouter);
 
+app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
