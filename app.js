@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 
 const appRouter = require('./routes/index');
@@ -20,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(appRouter);
+
+app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

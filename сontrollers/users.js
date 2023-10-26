@@ -13,6 +13,7 @@ const getUserInfo = (req, res) => {
       if (err instanceof mongoose.Error.CastError) {
         return res.status(400).send('Переданы некорректные данные');
       }
+      console.log(err.name)
       return res.status(500).send(err.message);
     });
 };

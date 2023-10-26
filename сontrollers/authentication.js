@@ -23,7 +23,7 @@ const register = (req, res) => {
       if (err.code === 11000) {
         return res.status(409).send('Такой пользователь уже существует');
       }
-      return res.status(400).send(err.message);
+      return res.status(500).send(err.message);
     });
 };
 
