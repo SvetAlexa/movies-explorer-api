@@ -47,7 +47,7 @@ const login = (req, res, next) => {
 
 const logout = (req, res) => {
   res.clearCookie('jwt', { path: '/' });
-  res.send('Вы успешно вышли из аккаунта');
+  res.send({ message: 'Вы успешно вышли из аккаунта' });
 };
 
 module.exports = {
