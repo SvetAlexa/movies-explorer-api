@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
+const { BadRequestError, NotFoundError, ForbiddenError } = require('../errors/index');
+const { CREATED_CODE } = require('../utils/constants');
 const Movie = require('../models/movie');
 
-const getUserMovies = (req, res) => {
+const getUserMovies = (req, res, next) => {
   const userId = req.user._id;
   Movie.find({ owner: userId }).sort({ createdAt: -1 }).populate('owner')
     .then((movies) => {
       res.send(movies);
     })
-    .catch((err) => res.status(500).send(err.message));
+    .catch(next);
 };
 
-const createMovie = (req, res) => {
+const createMovie = (req, res, next) => {
   const {
     country,
     director,
@@ -43,35 +45,35 @@ const createMovie = (req, res) => {
   })
     .then((movie) => {
       movie.populate('owner')
-        .then(() => res.status(201).send(movie))
-        .catch((err) => res.status(400).send(err.message));
+        .then(() => res.status(CREATED_CODE).send(movie))
+        .catch(next);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send('Переданы некорректные данные пользователя');
+        return next(new BadRequestError('Переданы некорректные данные'));
       }
-      return res.status(500).send(err.message);
+      return next(err);
     });
 };
 
-const deleteMovie = (req, res) => {
+const deleteMovie = (req, res, next) => {
   const { id } = req.params;
   Movie.findById(id)
-    .orFail(() => res.status(404).send('Фильм с указанным _id не найден'))
+    .orFail(() => new NotFoundError('Фильм с указанным _id не найден'))
     .then((movie) => {
       const ownerId = movie.owner.toString();
       const userId = req.user._id;
       if (ownerId !== userId) {
-        return res.status(403).send('Нет прав для удаления');
+        return next(new ForbiddenError('Недостаточно прав, чтобы выполнить действие'));
       }
       return movie.deleteOne(movie)
         .then((deletedMovie) => res.send(deletedMovie));
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return res.status(400).send('Переданы некорректные данные');
+        return next(new BadRequestError('Переданы некорректные данные'));
       }
-      return res.status(500).send(err.message);
+      return next(err);
     });
 };
 

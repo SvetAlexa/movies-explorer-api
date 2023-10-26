@@ -1,8 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { BadRequestError, ConflictError } = require('../errors/index');
+const { MONGO_DUPLICATE_ERROR_CODE, CREATED_CODE } = require('../utils/constants');
 const User = require('../models/user');
 
-const register = (req, res) => {
+const register = (req, res, next) => {
   const { email, name } = req.body;
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create(
@@ -12,22 +14,22 @@ const register = (req, res) => {
     ))
     .then((user) => {
       const { _id } = user;
-      res.status(201).send({
+      res.status(CREATED_CODE).send({
         email, name, _id,
       });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send('Переданы некорректные данные');
+        return next(new BadRequestError('Переданы некорректные данные'));
       }
-      if (err.code === 11000) {
-        return res.status(409).send('Такой пользователь уже существует');
+      if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
+        return next(new ConflictError('Пользователь с таким email уже существует'));
       }
-      return res.status(500).send(err.message);
+      return next(err);
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
@@ -40,7 +42,7 @@ const login = (req, res) => {
         })
         .send({ email, name, _id });
     })
-    .catch((err) => res.status(500).send(err.message));
+    .catch(next);
 };
 
 const logout = (req, res) => {
