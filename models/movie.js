@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { INVALID_URL_MESSAGE } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Введите ссылку в формате url',
+      message: INVALID_URL_MESSAGE,
     },
   },
   trailerLink: {
@@ -35,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Введите ссылку в формате url',
+      message: INVALID_URL_MESSAGE,
     },
   },
   thumbnail: {
@@ -43,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Введите ссылку в формате url',
+      message: INVALID_URL_MESSAGE,
     },
   },
   owner: {

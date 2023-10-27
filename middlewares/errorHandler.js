@@ -1,9 +1,11 @@
-const { INTERNAL_SERVER_CODE } = require('../utils/constants');
+const { INTERNAL_SERVER_CODE, INTERNAL_SERVER_MESSAGE } = require('../utils/constants');
 
 const errorHandler = (err, req, res, next) => {
   const { statusCode = INTERNAL_SERVER_CODE, message } = err;
 
-  res.status(statusCode).send({ message: statusCode === INTERNAL_SERVER_CODE ? 'На сервере произошла ошибка' : message });
+  res.status(statusCode).send({
+    message: statusCode === INTERNAL_SERVER_CODE ? INTERNAL_SERVER_MESSAGE : message,
+  });
 
   next();
 };

@@ -9,7 +9,7 @@ const limiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/errorHandler');
 const appRouter = require('./routes/index');
 
-const { PORT = 3000 } = process.env;
+const { PORT, DB_PATH } = require('./utils/config');
 
 const app = express();
 app.use(cors());
@@ -18,7 +18,7 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(DB_PATH, {
   useNewUrlParser: true,
 })
   .then(() => console.log('connected to DB'))
