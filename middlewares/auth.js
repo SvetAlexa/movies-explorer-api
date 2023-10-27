@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { UnauthorizedError } = require('../errors/index');
 const { UNAUTHORIZED_MESSAGE } = require('../utils/constants');
 
-const { SECRET_KEY } = require('../utils/config');
+const { SECRET_KEY, DEV_SECRET_KEY } = require('../utils/config');
 
 const tokenValidation = (req, res, next) => {
   const token = req.cookies.jwt;
@@ -13,7 +13,7 @@ const tokenValidation = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, SECRET_KEY);
+    payload = jwt.verify(token, process.env.NODE_ENV === 'production' ? SECRET_KEY : DEV_SECRET_KEY);
   } catch (err) {
     return next(new UnauthorizedError(UNAUTHORIZED_MESSAGE));
   }

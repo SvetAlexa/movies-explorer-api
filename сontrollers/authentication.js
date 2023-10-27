@@ -10,7 +10,7 @@ const {
 } = require('../utils/constants');
 const User = require('../models/user');
 
-const { SECRET_KEY, SALT_ROUNDS } = require('../utils/config');
+const { SECRET_KEY, DEV_SECRET_KEY, SALT_ROUNDS } = require('../utils/config');
 
 const register = (req, res, next) => {
   const { email, name } = req.body;
@@ -42,7 +42,7 @@ const login = (req, res, next) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const { name, _id } = user;
-      const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? SECRET_KEY : DEV_SECRET_KEY, { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
