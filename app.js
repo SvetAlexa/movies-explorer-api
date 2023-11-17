@@ -15,7 +15,7 @@ const { PORT, DB_PATH } = require('./utils/config');
 const app = express();
 
 const corsOptions = {
-  origin: ['http://127.0.0.1:3000', BASE_URL],
+  origin: ['http://127.0.0.1:3001', BASE_URL],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   allowedHeaders: ['Content-Type'],
