@@ -23,6 +23,8 @@ const OK_LOGOUT_MESSAGE = 'Вы успешно вышли из аккаунта'
 const INVALID_URL_MESSAGE = 'Введите ссылку в формате url';
 const INVALID_EMAIL_MESSAGE = 'Введите e-mail в правильном формате';
 
+const BASE_URL = 'https://movies-diploma.nomoredomainsrocks.ru';
+
 module.exports = {
   REGEX_URL,
   BAD_REQUEST_CODE,
@@ -46,4 +48,5 @@ module.exports = {
   OK_LOGOUT_MESSAGE,
   INVALID_URL_MESSAGE,
   INVALID_EMAIL_MESSAGE,
+  BASE_URL,
 };

@@ -8,11 +8,20 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/errorHandler');
 const appRouter = require('./routes/index');
+const { BASE_URL } = require('./utils/constants');
 
 const { PORT, DB_PATH } = require('./utils/config');
 
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: ['http://127.0.0.1:3000', BASE_URL],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
