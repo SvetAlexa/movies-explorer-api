@@ -40,7 +40,7 @@
 * **`/users/me`**
    - *`PATCH`* запрос - обновляет информацию о пользователе (email и имя)
 * **`/movies`**
-    - *`GET`* запрос - возвращает все сохраненные текущем пользователем фильмы
+    - *`GET`* запрос - возвращает все сохраненные текущим пользователем фильмы
     - *`POST`* запрос - создает в БД фильм с переданными в теле параметрами
 * **`/movies/_id`**
    - *`DELETE`* запрос - удаляет сохраненный фильм по `id`
@@ -52,7 +52,7 @@
 ## Запуск проекта
 Предварительные требования: [Node.js](https://nodejs.org/en) и [MongoDB](https://www.mongodb.com/try/download/community) версия 4
 
-* `git clone git@github.com:SvetAlexa/movies-explorer-api.git` склонировать репозиторий или сказать zip-архив  
+* `git clone git@github.com:SvetAlexa/movies-explorer-api.git` склонировать репозиторий или скачать zip-архив  
 * `cd movies-explorer-api` — перейти в папку проекта
 * `npm ci` — установить зависимости  
 * `npm run start` — запуcтить сервер   
